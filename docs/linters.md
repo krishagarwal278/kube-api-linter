@@ -105,7 +105,7 @@ When `usePatchStrategy` is set to `Forbid`, the linter will suggest to remove th
 
 The `dependenttags` linter enforces dependencies between markers. This prevents API inconsistencies where one marker requires the presence of another.
 
-The linter is configured with a main tag and a list of required dependent tags. If the main tag is present on a field, the linter checks for the presence of the dependent tags based on the `type` field:
+The linter is configured with an identifier marker and a list of required dependsOn markers. If the identifier marker is present on a field, the linter checks for the presence of the dependsOn markers based on the `type` field:
 - `All`: Ensures that **all** of the dependent tags are present.
 - `Any`: Ensures that **at least one** of the dependent tags is present.
 
@@ -117,15 +117,15 @@ lintersConfig:
     rules:
       - identifier: "k8s:unionMember"
         type: "All"
-        dependents:
+        dependsOn:
           - "k8s:optional"
       - identifier: "listType"
         type: "All"
-        dependents:
+        dependsOn:
           - "k8s:listType"
       - identifier: "example:any"
         type: "Any"
-        dependents:
+        dependsOn:
           - "dep1"
           - "dep2"
 ```
