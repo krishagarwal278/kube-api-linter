@@ -48,7 +48,7 @@ var _ = Describe("dependenttags initializer", func() {
 						{
 							Identifier: "k8s:unionMember",
 							Type:       dependenttags.DependencyTypeAll,
-							Dependents: []string{"k8s:optional"},
+							DependsOn:  []string{"k8s:optional"},
 						},
 					},
 				},
@@ -59,7 +59,7 @@ var _ = Describe("dependenttags initializer", func() {
 					Rules: []dependenttags.Rule{
 						{
 							Identifier: "k8s:unionMember",
-							Dependents: []string{"k8s:optional"},
+							DependsOn:  []string{"k8s:optional"},
 						},
 					},
 				},
@@ -75,14 +75,14 @@ var _ = Describe("dependenttags initializer", func() {
 				config: dependenttags.Config{
 					Rules: []dependenttags.Rule{
 						{
-							Type:       dependenttags.DependencyTypeAll,
-							Dependents: []string{"k8s:optional"},
+							Type:      dependenttags.DependencyTypeAll,
+							DependsOn: []string{"k8s:optional"},
 						},
 					},
 				},
 				expectedErr: "dependenttags.rules[0].identifier: Invalid value: \"\": identifier marker cannot be empty",
 			}),
-			Entry("with missing dependents", testCase{
+			Entry("with missing dependsOn", testCase{
 				config: dependenttags.Config{
 					Rules: []dependenttags.Rule{
 						{
@@ -91,7 +91,7 @@ var _ = Describe("dependenttags initializer", func() {
 						},
 					},
 				},
-				expectedErr: "dependenttags.rules[0].dependents: Invalid value: []string(nil): dependents list cannot be empty",
+				expectedErr: "dependenttags.rules[0].dependsOn: Invalid value: []string(nil): dependsOn list cannot be empty",
 			}),
 			Entry("with invalid type", testCase{
 				config: dependenttags.Config{
@@ -99,11 +99,11 @@ var _ = Describe("dependenttags initializer", func() {
 						{
 							Identifier: "k8s:unionMember",
 							Type:       "invalid",
-							Dependents: []string{"k8s:optional"},
+							DependsOn:  []string{"k8s:optional"},
 						},
 					},
 				},
-				expectedErr: fmt.Sprintf(`dependenttags.rules[0].type: Invalid value: "invalid": type must be '%s' or '%s'`, dependenttags.DependencyTypeAll, dependenttags.DependencyTypeAny),
+				expectedErr: fmt.Sprintf("dependenttags.rules[0].type: Invalid value: \"invalid\": type must be '%s' or '%s'", dependenttags.DependencyTypeAll, dependenttags.DependencyTypeAny),
 			}),
 		)
 	})

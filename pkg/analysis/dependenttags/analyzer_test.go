@@ -30,22 +30,22 @@ func TestAnalyzer(t *testing.T) {
 			{
 				Identifier: "k8s:unionMember",
 				Type:       dependenttags.DependencyTypeAll,
-				Dependents: []string{"k8s:optional"},
+				DependsOn:  []string{"k8s:optional"},
 			},
 			{
 				Identifier: "listType",
 				Type:       dependenttags.DependencyTypeAll,
-				Dependents: []string{"k8s:listType"},
+				DependsOn:  []string{"k8s:listType"},
 			},
 			{
 				Identifier: "example:any",
 				Type:       dependenttags.DependencyTypeAny,
-				Dependents: []string{"dep1", "dep2"},
+				DependsOn:  []string{"dep1", "dep2"},
 			},
 			{
 				Identifier: "listType=map",
 				Type:       dependenttags.DependencyTypeAll,
-				Dependents: []string{"listMapKey"},
+				DependsOn:  []string{"listMapKey"},
 			},
 		},
 	}
