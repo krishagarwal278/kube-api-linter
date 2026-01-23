@@ -253,9 +253,34 @@ type MyStruct struct {
 }
 ```
 
+### Configuration
+
+```yaml
+lintersConfig:
+  defaults:
+    preferredDefaultMarker: default | kubebuilder:default # The preferred default marker to use. Defaults to `default`.
+    omitempty:
+      policy: SuggestFix | Warn | Ignore # The policy for omitempty in fields with defaults. Defaults to `SuggestFix`.
+    omitzero:
+      policy: SuggestFix | Warn | Forbid # The policy for omitzero in struct fields with defaults. Defaults to `SuggestFix`.
+```
+
+When `preferredDefaultMarker` is set, the linter will suggest replacing the secondary marker with the preferred one (e.g., if `default` is preferred and a field uses `kubebuilder:default`, it will suggest using `default` instead).
+
+The `omitempty` policy controls how the linter handles missing `omitempty` tags on non-struct fields with defaults:
+- `SuggestFix`: Suggests adding `omitempty` to the json tag
+- `Warn`: Warns about missing `omitempty` without suggesting a fix
+- `Ignore`: Does not check for `omitempty`
+
+The `omitzero` policy controls how the linter handles missing `omitzero` tags on struct fields with defaults:
+- `SuggestFix`: Suggests adding `omitzero` to the json tag (replacing `omitempty` if present)
+- `Warn`: Warns about missing `omitzero` without suggesting a fix
+- `Forbid`: Does not check for `omitzero` (use this for Go versions before 1.24)
+
 ### Fixes
 
-The `defaults` linter can automatically add `omitempty,omitzero` to the json tag when missing.
+The `defaults` linter can automatically add `omitempty` or `omitzero` to the json tag when missing.
+For struct fields, the linter prefers `omitzero` over `omitempty` and will suggest replacing `omitempty` with `omitzero`.
 
 ## DuplicateMarkers
 
