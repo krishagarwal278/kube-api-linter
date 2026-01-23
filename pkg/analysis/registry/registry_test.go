@@ -248,6 +248,46 @@ var _ = Describe("Registry", func() {
 				},
 				expectedErr: "error validating linters config: lintersConfig.optionalorrequired.preferredRequiredMarker: Invalid value: \"invalid\": invalid value, must be one of \"required\", \"kubebuilder:validation:Required\" or omitted",
 			}),
+
+			// Tests for disabled linters with configuration
+			Entry("With config for explicitly disabled linter should not error", validateLintersConfigTableInput{
+				linters: config.Linters{
+					Disable: []string{"jsontags"},
+				},
+				config: config.LintersConfig{
+					"jsontags": jsontags.JSONTagsConfig{
+						JSONTagRegex: "^[a-z][a-z0-9]*(?:[A-Z][a-z0-9]*)*$",
+					},
+				},
+				expectedErr: "",
+			}),
+			Entry("With config for disabled linter when all disabled with wildcard should not error", validateLintersConfigTableInput{
+				linters: config.Linters{
+					Disable: []string{config.Wildcard},
+				},
+				config: config.LintersConfig{
+					"jsontags": jsontags.JSONTagsConfig{
+						JSONTagRegex: "^[a-z][a-z0-9]*(?:[A-Z][a-z0-9]*)*$",
+					},
+				},
+				expectedErr: "",
+			}),
+			Entry("With config for non-existent linter should error", validateLintersConfigTableInput{
+				config: config.LintersConfig{
+					"nonexistent": map[string]any{
+						"someOption": "value",
+					},
+				},
+				expectedErr: "error validating linters config: lintersConfig.nonexistent: Invalid value: \"nonexistent\": unknown linter",
+			}),
+			Entry("With config for non-configurable linter should error", validateLintersConfigTableInput{
+				config: config.LintersConfig{
+					"nobools": map[string]any{
+						"someOption": "value",
+					},
+				},
+				expectedErr: "error validating linters config: lintersConfig.nobools: Invalid value: \"nobools\": linter is not configurable",
+			}),
 		)
 	})
 })
