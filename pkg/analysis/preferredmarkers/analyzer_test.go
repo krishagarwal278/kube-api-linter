@@ -48,3 +48,18 @@ func TestWithConfiguration(t *testing.T) {
 		},
 	}), "a/...")
 }
+
+func TestWithCustomMessage(t *testing.T) {
+	testdata := analysistest.TestData()
+	analysistest.RunWithSuggestedFixes(t, testdata, newAnalyzer(&Config{
+		Markers: []Marker{
+			{
+				PreferredIdentifier: "k8s:optional",
+				EquivalentIdentifiers: []EquivalentIdentifier{
+					{Identifier: "kubebuilder:validation:Optional"},
+				},
+				Message: "custom message for k8s:optional",
+			},
+		},
+	}), "b/...")
+}
