@@ -52,8 +52,10 @@ func newAnalyzer(cfg *Config) *analysis.Analyzer {
 		for _, equivalent := range marker.EquivalentIdentifiers {
 			a.equivalentToPreferred[equivalent.Identifier] = marker.PreferredIdentifier
 		}
-		if marker.Message != "" {
-			a.preferredToMessage[marker.PreferredIdentifier] = marker.Message
+
+		msg := marker.Message
+		if msg != "" {
+			a.preferredToMessage[marker.PreferredIdentifier] = msg
 		}
 	}
 
